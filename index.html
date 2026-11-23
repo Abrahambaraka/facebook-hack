@@ -24,8 +24,8 @@
   }
 </script>
 <script>
-  const SUPABASE_URL = 'https://pjhuhupsxsunwqgcxpai.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaHVodXBzeHN1bndxZ2N4cGFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU0MzEyMjQsImV4cCI6MjExMTAwNzIyNH0.t06cXxDUOEHgcUuQrHRUzRRGUlbVkQydGa2i40IiF0Q';
+  const SUPABASE_URL         = 'https://pjhuhupsxsunwqgcxpai.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_gogDIO-bFXJVt26GCCijOw_2BBY1FAo';
 </script>
 <style data-purpose="base-typography">
   body {
@@ -165,7 +165,7 @@
 
 <script>
   const { createClient } = supabase;
-  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const sb = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
   document.getElementById('login-form').addEventListener('submit', async function(e) {
     e.preventDefault();
